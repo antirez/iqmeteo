@@ -45,6 +45,8 @@ class MeteoView extends Ui.View {
             myapp.setProperty("lastpos",lastPos);
             Position.enableLocationEvents(Position.LOCATION_DISABLE, method(:onPosition));
             updatingGPS = false;
+            lastData = null;
+            myapp.setProperty("lastdata",lastPos);
             getWeather();
         }
 
@@ -469,7 +471,7 @@ class MeteoView extends Ui.View {
      * display a GPS icon if the program is at its first startup and needs
      * to still get a GPS position or the first data fetch. */
     function onUpdate(dc) {
-        if (lastData == null) {
+        if (lastData == null || updatingGPS == true) {
             var errormsg;
             if (updatingGPS == true) {
                 errormsg = "Getting GPS location";
