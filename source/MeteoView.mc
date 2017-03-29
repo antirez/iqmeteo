@@ -440,13 +440,28 @@ class MeteoView extends Ui.View {
         dc.drawText(dc.getWidth()/2+27+tempwidth/2,25,Graphics.FONT_XTINY,tempunit,Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
         /* Show forecast. */
-        var y = dc.getHeight()/2+5;
+        var y = dc.getHeight()/2+8;
         var x = 25;
         for (var i = 0; i < 6; i++) {
             var stri = i.toString();
             var f = lastData["query"]["results"]["channel"]["item"]["forecast"][i];
             showWeatherAgent(dc,x,y,25,f["code"].toNumber(),f["text"]);
 
+            /* Show the day, using multiple font drawing to create a border
+             * effect to make it more readable. */
+            var tx = x-9;
+            var ty = y-13;
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+            for (var ox = -1; ox <= 1; ox ++) {
+                for (var oy = -1; oy <= 1; oy ++) {
+                    dc.drawText(tx+ox, ty+oy, Graphics.FONT_XTINY, f["day"], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                }
+            }
+
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(tx, ty, Graphics.FONT_XTINY, f["day"], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+            /* Finally show the temperatures. */
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
             dc.drawText(x-10, y+18, Graphics.FONT_XTINY, f["low"], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
