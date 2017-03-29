@@ -6,4 +6,4 @@ monkeyc -o $PRGOUT -m manifest.xml -y $DEVKEY source/*.mc -z resources/strings.x
 killall simulator
 connectiq
 sleep 1
-monkeydo /tmp/myApp.prg vivoactive_hr
+monkeydo $PRGOUT vivoactive_hr
