@@ -46,7 +46,7 @@ class MeteoView extends Ui.View {
             Position.enableLocationEvents(Position.LOCATION_DISABLE, method(:onPosition));
             updatingGPS = false;
             lastData = null;
-            myapp.setProperty("lastdata",lastPos);
+            myapp.setProperty("lastdata",lastData);
             getWeather();
         }
 
@@ -449,7 +449,7 @@ class MeteoView extends Ui.View {
 
             /* Show the day, using multiple font drawing to create a border
              * effect to make it more readable. */
-            var tx = x-9;
+            var tx = x-13;
             var ty = y-13;
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
             for (var ox = -1; ox <= 1; ox ++) {
@@ -489,16 +489,21 @@ class MeteoView extends Ui.View {
         if (lastData == null || updatingGPS == true) {
             var errormsg;
             if (updatingGPS == true) {
-                errormsg = "Getting GPS location";
+                errormsg = ["Getting GPS location",
+                            "Does not work?",
+                            "1. Open the 'run' app",
+                            "2. Wait for the GPS",
+                            "icon to turn green.",
+                            "3. Return here."];
             } else {
-                errormsg = "Loading weather data";
+                errormsg = ["Loading weather data"];
             }
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
             dc.clear();
 
             /* Draw the GPS icon. */
             var cx = dc.getWidth()/2;
-            var cy = dc.getHeight()/2;
+            var cy = dc.getHeight()/2+40;
             dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLACK);
             dc.fillCircle(cx,cy,50);
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
@@ -515,8 +520,10 @@ class MeteoView extends Ui.View {
             dc.fillCircle(cx+30,cy-30,5);
 
             /* Draw the GPS/data status line. */
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
-            dc.drawText(dc.getWidth()/2, 10, Graphics.FONT_XTINY, errormsg, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            for (var i = 0; i < errormsg.size(); i++) {
+                dc.drawText(dc.getWidth()/2, 10+(i*15), Graphics.FONT_XTINY, errormsg[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            }
             return;
         }
         renderWeatherCondition(dc);
